@@ -1,3 +1,8 @@
+h2_pasr_output.npy
+obj/
+pyjac/tests/generate_data_bin
+src/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
