@@ -30,10 +30,9 @@ void JacobianKernel::compile()
     cl_int return_code;
 
 
-    const char* filename[4] = { "/home/stefanke/pyJac-v2/out/chem_utils.ocl", "/home/stefanke/pyJac-v2/out/species_rates.ocl", "/home/stefanke/pyJac-v2/out/jacobian.ocl", "/home/stefanke/pyJac-v2/out/jacobian_driver.ocl" };
-    const char* platform = "NVIDIA";
-    const char* out_name = "/home/stefanke/pyJac-v2/out/jacobian.bin";
-    const char* build_options = "-I/home/stefanke/pyJac-v2/out -cl-fast-relaxed-math -cl-mad-enable -cl-std=CL1.2";
+    const char* filename[4] = { "out/chem_utils.ocl", "out/species_rates.ocl", "jacobian.ocl", "out/jacobian_driver.ocl" };
+    const char* out_name = "out/jacobian.bin";
+    const char* build_options = "-Iout -cl-fast-relaxed-math -cl-mad-enable -cl-std=CL1.2";
 
     FILE *fp;
     char* source_str[4];
@@ -60,19 +59,7 @@ void JacobianKernel::compile()
 
     /* Get platform/device information */
     check_err(clGetPlatformIDs(MAX_PLATFORM, platform_id, &ret_num_platforms));
-    cl_platform_id pid = NULL;
-    for (int i = 0; i < ret_num_platforms; ++i)
-    {
-        //check if intel
-        char pvendor[100];
-        size_t psize = 100 * sizeof(char);
-        check_err(clGetPlatformInfo(platform_id[i], CL_PLATFORM_VENDOR, psize, pvendor, NULL));
-        if(strstr(pvendor, platform) != NULL)
-        {
-            pid = platform_id[i];
-            break;
-        }
-    }
+    cl_platform_id pid = platform_id[0];
     cassert(pid != NULL, "Platform not found");
 
 

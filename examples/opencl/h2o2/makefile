@@ -1,8 +1,7 @@
 CXX = g++
 CXXFLAGS=-x c++
 DEPS =
-LDFLAGS = -L/soft/compilers/cuda/cuda-10.0.130/lib64 -lOpenCL 
-OBJ = jacobian_main.o read_initial_conditions.o error_check.o timer.o jacobian_compiler.o
+LDFLAGS = -lOpenCL
 
 %.o: %.ocl $(DEPS)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
@@ -11,7 +10,7 @@ OBJ = jacobian_main.o read_initial_conditions.o error_check.o timer.o jacobian_c
 
 all: genic jac
 
-jac: $(OBJ)
+jac: jacobian_main.o read_initial_conditions.o error_check.o timer.o jacobian_compiler.o
 	$(CXX) -o $@ $^ $(LDFLAGS)
 
 genic: genic.cpp

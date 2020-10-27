@@ -64,8 +64,8 @@ size_t Kernel::this_run(size_t offset)
     return this->problem_size - offset < per_run ? this->problem_size - offset : per_run;
 }
 
-const char* Kernel::build_options = "-I/home/stefanke/pyJac-v2/out -cl-std=CL1.2";
-const char* Kernel::platform_check = "NVIDIA";
+const char* Kernel::build_options = "-Iout -cl-std=CL1.2";
+const char* Kernel::platform_check = "";
 const unsigned int Kernel::device_type = CL_DEVICE_TYPE_ALL;
 
 const char* Kernel::_species_names[] = { "H2", "H", "O", "O2", "OH", "H2O", "HO2", "H2O2", "AR" };
@@ -128,19 +128,7 @@ void Kernel::init(size_t problem_size, size_t work_size)
 
     /* Get platform/device information */
     check_err(clGetPlatformIDs(NUM_PLATFORMS, platform_id, &ret_num_platforms));
-    cl_platform_id pid = NULL;
-    for (unsigned int i = 0; i < ret_num_platforms; ++i)
-    {
-        //check if matches user-supplied platform
-        char pvendor[100];
-        size_t psize = 100 * sizeof(char);
-        check_err(clGetPlatformInfo(platform_id[i], CL_PLATFORM_VENDOR, psize, pvendor, NULL));
-        if(strstr(pvendor, platform_check) != NULL)
-        {
-            pid = platform_id[i];
-            break;
-        }
-    }
+    cl_platform_id pid = platform_id[0];
     cassert(pid != NULL, "Platform not found");
 
     if (device_type != CL_DEVICE_TYPE_GPU)
@@ -391,7 +379,7 @@ JacobianKernel::JacobianKernel()
 {
     this->max_per_run = 9223372036854775808;
     this->num_source = 5;
-    this->kernel_path = "/home/stefanke/pyJac-v2/out/jacobian.bin";
+    this->kernel_path = "out/jacobian.bin";
 
 }
 
@@ -418,7 +406,7 @@ JacobianKernel::JacobianKernel(size_t problem_size, size_t work_size, bool do_no
     this->max_per_run = 9223372036854775808;
     this->compiled = do_not_compile;
     this->num_source = 5;
-    this->kernel_path = "/home/stefanke/pyJac-v2/out/jacobian.bin";
+    this->kernel_path = "out/jacobian.bin";
 this->init(problem_size, work_size);
 }
 
